@@ -2,122 +2,109 @@ import numpy as np
 import pandas as pd
 import joblib
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, OneHotEncoder
-from sklearn.feature_extraction.text import TfidfVectorizer
 from category_encoders.count import CountEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.compose import ColumnTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+from data_cleaning import data_for_content_filtering
 from scipy.sparse import save_npz
 
-# Importing the cosine similarity.
-from sklearn.metrics.pairwise import cosine_similarity
-
-# Importing a functions.
-from data_cleaning import data_for_content_filtering
-
-# Loading the Cleaned Data.
+# Cleaned Data Path
 CLEANED_DATA_PATH = "data/cleaned_data.csv"
 
-# columns to transforms.
+# cols to transform
 frequency_enode_cols = ['year']
-ohe_cols = ['artist', "time_signature", "key"]
+ohe_cols = ['artist',"time_signature","key"]
 tfidf_col = 'tags'
-standard_scale_cols = ["duration_ms", "loudness", "tempo"]
-min_max_scale_cols = ["danceability", "energy", "speechiness", "acousticness", "instrumentalness", "liveness","valence"]
+standard_scale_cols = ["duration_ms","loudness","tempo"]
+min_max_scale_cols = ["danceability","energy","speechiness","acousticness","instrumentalness","liveness","valence"]
 
 
-def build_transformer(data):
+def train_transformer(data):
     """
-        Trains a ColumnTransformer on the provided data and saves the
-        transformer to a file.
+    Trains a ColumnTransformer on the provided data and saves the transformer to a file.
 
-        The ColumnTransformer applies the following transformations:
-            - Frequency Encoding using CountEncoder on specified columns.
-            - One-Hot Encoding using OneHotEncoder on specified columns.
-            - TF-IDF Vectorization using TfidfVectorizer on a specified column.
-            - Standard Scaling using StandardScaler on specified columns.
-            - Min-Max Scaling using MinMaxScaler on specified columns.
+    The ColumnTransformer applies the following transformations:
+        - Frequency Encoding using CountEncoder on specified columns.
+        - One-Hot Encoding using OneHotEncoder on specified columns.
+        - TF-IDF Vectorization using TfidfVectorizer on a specified column.
+        - Standard Scaling using StandardScaler on specified columns.
+        - Min-Max Scaling using MinMaxScaler on specified columns.
 
-        Parameters:
-            data (pd.DataFrame): The input data to be transformed.
-
-        Returns:
-            None
-
-        Saves:
-            transformer.joblib: The trained ColumnTransformer object.
+    Parameters:
+        data (pd.DataFrame): The input data to be transformed.
+    Returns:
+        None
+    Saves:
+        transformer.joblib: The trained ColumnTransformer object.
     """
 
-    # Building an transformer.
-    transformer = ColumnTransformer(
-        transformers=[
-            ("frequency_encode", CountEncoder(normalize=True, return_df=True), frequency_enode_cols),
-            ("ohe", OneHotEncoder(handle_unknown="ignore"), ohe_cols),
-            ("tfidf", TfidfVectorizer(max_features=85), tfidf_col),
-            ("standard_scale", StandardScaler(), standard_scale_cols),
-            ("min_max_scale", MinMaxScaler(), min_max_scale_cols)
-        ], remainder="passthrough", n_jobs=-1, force_int_remainder_cols=False
-    )
+    # transformer 
+    transformer = ColumnTransformer(transformers=[
+        ("frequency_encode", CountEncoder(normalize=True,return_df=True), frequency_enode_cols),
+        ("ohe", OneHotEncoder(handle_unknown="ignore"), ohe_cols),
+        ("tfidf", TfidfVectorizer(max_features=85), tfidf_col),
+        ("standard_scale", StandardScaler(), standard_scale_cols),
+        ("min_max_scale", MinMaxScaler(), min_max_scale_cols)
+    ],remainder='passthrough',n_jobs=-1,force_int_remainder_cols=False)
 
-    # Now, fit the transformer.
+    # fit the transformer
     transformer.fit(data)
 
-    # save the transformer.
+    # save the transformer
     joblib.dump(transformer, "transformer.joblib")
-
+    
 
 def transform_data(data):
     """
-        Transforms the input data using a pre-trained transformer.
-        Args:
-            data (array-like): The data to be transformed.
-        Returns:
-            array-like: The transformed data.
+    Transforms the input data using a pre-trained transformer.
+    Args:
+        data (array-like): The data to be transformed.
+    Returns:
+        array-like: The transformed data.
     """
 
-    # Load the transformer.
+    # load the transformer
     transformer = joblib.load("transformer.joblib")
-
-    # transform the data.
+    
+    # transform the data
     transformed_data = transformer.transform(data)
-
+    
     return transformed_data
 
 
-def save_transformed_data(transformed_data, save_path):
+def save_transformed_data(transformed_data,save_path):
     """
-        Save the transformed data to a specified file path.
+    Save the transformed data to a specified file path.
 
-        Parameters:
-            transformed_data (scipy.sparse.csr_matrix): The transformed data
-            to be saved.
-            save_path (str): The file path where the transformed data will be
-            saved.
+    Parameters:
+        transformed_data (scipy.sparse.csr_matrix): The transformed data to be saved.
+        save_path (str): The file path where the transformed data will be saved.
 
-        Returns:
-            None
+    Returns:
+        None
     """
-
-    # save the transformed data.
+    # save the transformed data
     save_npz(save_path, transformed_data)
 
 
 def calculate_similarity_scores(input_vector, data):
     """
-        Calculate similarity scores between an input vector and a dataset using 
-        cosine similarity.
-        Args:
-            input_vector (array-like): The input vector for which similarity scores are to be calculated.
-            data (array-like): The dataset against which the similarity scores are to be calculated.
-        Returns:
-            array-like: An array of similarity scores.
+    Calculate similarity scores between an input vector and a dataset using cosine similarity.
+    Args:
+        input_vector (array-like): The input vector for which similarity scores are to be calculated.
+        data (array-like): The dataset against which the similarity scores are to be calculated.
+    Returns:
+        array-like: An array of similarity scores.
     """
 
-    # calculate the similarity scores.
+    # calculate similarity scores
     similarity_scores = cosine_similarity(input_vector, data)
-
+    
     return similarity_scores
 
 
-def content_recommendation(song_name, artist_name, songs_data, transformed_data, k=10):
+def content_recommendation(song_name,artist_name,songs_data, transformed_data, k=10):
     """
     Recommends top k songs similar to the given song based on content-based filtering.
 
@@ -131,35 +118,33 @@ def content_recommendation(song_name, artist_name, songs_data, transformed_data,
     Returns:
         DataFrame: A DataFrame containing the top k recommended songs with their names, artists, and Spotify preview URLs.
     """
-
-    # Convert the song name to lowercase.
+    # convert song name to lowercase
     song_name = song_name.lower()
 
-    # convert the arrtist name to lowercase.
+    # convert the artist name to lowercase
     artist_name = artist_name.lower()
 
-    # filter out the song from data.
+    # filter out the song from data
     song_row = songs_data.loc[(songs_data["name"] == song_name) & (songs_data["artist"] == artist_name)]
 
-    # get the index of song.
+    # get the index of song
     song_index = song_row.index[0]
 
-    # Generate the input vector.
-    input_vector = transformed_data[song_index].reshape(1, -1)
+    # generate the input vector
+    input_vector = transformed_data[song_index].reshape(1,-1)
 
-    # calculate similarity scores. 
+    # calculate similarity scores
     similarity_scores = calculate_similarity_scores(input_vector, transformed_data)
 
-    # Get the top k songs.
+    # get the top k songs
     top_k_songs_indexes = np.argsort(similarity_scores.ravel())[-k-1:][::-1]
 
-    # Get the top k songs names.
+    # get the top k songs names
     top_k_songs_names = songs_data.iloc[top_k_songs_indexes]
 
-    # print the top k songs.
+    # print the top k songs
     top_k_list = top_k_songs_names[['name','artist','spotify_preview_url']].reset_index(drop=True)
-
-    # return top k list.
+    
     return top_k_list
 
 
@@ -173,21 +158,20 @@ def main(data_path):
     Returns:
         None: Prints the top k recommended songs based on content similarity.
     """
-    
-    # Load the data.
+    # load the data
     data = pd.read_csv(data_path)
 
     # clean the data
     data_content_filtering = data_for_content_filtering(data)
 
-    # train the transformer.
-    build_transformer(data_content_filtering)
+    # train the transformer
+    train_transformer(data_content_filtering)
 
-    # Now, transform the data.
+    # transform the data
     transformed_data = transform_data(data_content_filtering)
-
-    # save transformed data.
-    save_transformed_data(transformed_data, "data/transformed_data.npz")
-
+    
+    #save transformed data
+    save_transformed_data(transformed_data,"data/transformed_data.npz")
+    
 if __name__ == "__main__":
     main(CLEANED_DATA_PATH)
