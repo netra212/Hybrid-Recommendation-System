@@ -29,3 +29,37 @@ st.write("You entered: ", artist_name)
 # lowercase the input.
 song_name = song_name.lower()
 artist_name = artist_name.lower()
+
+# k recommendation.
+k = st.selectbox("How many recommendations do you want ?", [5, 10, 15, 20], index=1)
+
+# Button. 
+if st.button("Get Recommendations"):
+    if (data["name"] == song_name).any():
+        st.write("Recommendations for ", f"**{song_name}**")
+        recommendations = recommend(song_name, data, transformed_data, k)
+
+        # Display Recommendation.
+        for index, recommendation in recommendations.iterrows():
+            song_name = recommendation["name"].title()
+            artist_name = recommendation["artist"].title()
+
+            if index == 0:
+                st.markdown("## Currently Playing")
+                st.markdown(f"## **{song_name}** by **{artist_name}")
+                st.audio(recommendation["spotify_preview_url"])
+                st.write("------")
+
+            elif index == 1:
+                st.markdown("### Next up 🎵")
+                st.markdown(f"### {index}. **{song_name}** by **{artist_name}**")
+                st.audio(recommendation["spotify_preview_url"])
+                st.write("------")
+            
+            else:
+                st.markdown(f"### {index}. **{song_name}** by **{artist_name}**")
+                st.audio(recommendation["spotify_preview_url"])
+                st.write("------")
+        
+        else:
+            st.write(f"Sorry, we could not find {song_name} in our database.Please try another song.")
