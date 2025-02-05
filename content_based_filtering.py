@@ -21,22 +21,21 @@ min_max_scale_cols = ["danceability","energy","speechiness","acousticness","inst
 
 
 def train_transformer(data):
+
     """
     Trains a ColumnTransformer on the provided data and saves the transformer to a file.
-
     The ColumnTransformer applies the following transformations:
-        - Frequency Encoding using CountEncoder on specified columns.
-        - One-Hot Encoding using OneHotEncoder on specified columns.
-        - TF-IDF Vectorization using TfidfVectorizer on a specified column.
-        - Standard Scaling using StandardScaler on specified columns.
-        - Min-Max Scaling using MinMaxScaler on specified columns.
-
+    - Frequency Encoding using CountEncoder on specified columns.
+    - One-Hot Encoding using OneHotEncoder on specified columns.
+    - TF-IDF Vectorization using TfidfVectorizer on a specified column.
+    - Standard Scaling using StandardScaler on specified columns.
+    - Min-Max Scaling using MinMaxScaler on specified columns.
     Parameters:
-        data (pd.DataFrame): The input data to be transformed.
+    data (pd.DataFrame): The input data to be transformed.
     Returns:
-        None
+    None
     Saves:
-        transformer.joblib: The trained ColumnTransformer object.
+    transformer.joblib: The trained ColumnTransformer object.
     """
 
     # transformer 
@@ -56,6 +55,7 @@ def train_transformer(data):
     
 
 def transform_data(data):
+
     """
     Transforms the input data using a pre-trained transformer.
     Args:
@@ -74,21 +74,24 @@ def transform_data(data):
 
 
 def save_transformed_data(transformed_data,save_path):
+
     """
     Save the transformed data to a specified file path.
 
     Parameters:
-        transformed_data (scipy.sparse.csr_matrix): The transformed data to be saved.
-        save_path (str): The file path where the transformed data will be saved.
+    transformed_data (scipy.sparse.csr_matrix): The transformed data to be saved.
+    save_path (str): The file path where the transformed data will be saved.
 
     Returns:
-        None
+    None
     """
+
     # save the transformed data
     save_npz(save_path, transformed_data)
 
 
 def calculate_similarity_scores(input_vector, data):
+
     """
     Calculate similarity scores between an input vector and a dataset using cosine similarity.
     Args:
@@ -103,75 +106,64 @@ def calculate_similarity_scores(input_vector, data):
     
     return similarity_scores
 
-# artist_name -> removing an artist name for now. 
-def recommend(song_name,songs_data, transformed_data, k=10):
+
+def content_recommendation(song_name,artist_name,songs_data, transformed_data, k=10):
+
     """
     Recommends top k songs similar to the given song based on content-based filtering.
 
     Parameters:
-        song_name (str): The name of the song to base the recommendations on.
-        artist_name (str): The name of the artist of the song.
-        songs_data (DataFrame): The DataFrame containing song information.
-        transformed_data (ndarray): The transformed data matrix for similarity calculations.
-        k (int, optional): The number of similar songs to recommend. Default is 10.
+    song_name (str): The name of the song to base the recommendations on.
+    artist_name (str): The name of the artist of the song.
+    songs_data (DataFrame): The DataFrame containing song information.
+    transformed_data (ndarray): The transformed data matrix for similarity calculations.
+    k (int, optional): The number of similar songs to recommend. Default is 10.
 
     Returns:
-        DataFrame: A DataFrame containing the top k recommended songs with their names, artists, and Spotify preview URLs.
+    DataFrame: A DataFrame containing the top k recommended songs with their names, artists, and Spotify preview URLs.
     """
+
     # convert song name to lowercase
     song_name = song_name.lower()
-
     # convert the artist name to lowercase
-    # artist_name = artist_name.lower()
-
+    artist_name = artist_name.lower()
     # filter out the song from data
-    # song_row = songs_data.loc[(songs_data["name"] == song_name) & (songs_data["artist"] == artist_name)]
-
-    song_row = songs_data.loc[(songs_data["name"] == song_name)]
-
+    song_row = songs_data.loc[(songs_data["name"] == song_name) & (songs_data["artist"] == artist_name)]
     # get the index of song
     song_index = song_row.index[0]
-
     # generate the input vector
     input_vector = transformed_data[song_index].reshape(1,-1)
-
     # calculate similarity scores
     similarity_scores = calculate_similarity_scores(input_vector, transformed_data)
-
     # get the top k songs
     top_k_songs_indexes = np.argsort(similarity_scores.ravel())[-k-1:][::-1]
-
     # get the top k songs names
     top_k_songs_names = songs_data.iloc[top_k_songs_indexes]
-
     # print the top k songs
-    top_k_list = top_k_songs_names[['name','spotify_preview_url']].reset_index(drop=True)
-    
+    top_k_list = top_k_songs_names[['name','artist','spotify_preview_url']].reset_index(drop=True)
     return top_k_list
 
 
 def main(data_path):
+
     """
     Test the recommendations for a given song using content-based filtering.
 
     Parameters:
-        data_path (str): The path to the CSV file containing the song data.
+    data_path (str): The path to the CSV file containing the song data.
 
     Returns:
-        None: Prints the top k recommended songs based on content similarity.
+    None: Prints the top k recommended songs based on content similarity.
     """
+    
     # load the data
     data = pd.read_csv(data_path)
-
     # clean the data
     data_content_filtering = data_for_content_filtering(data)
-
     # train the transformer
     train_transformer(data_content_filtering)
-
     # transform the data
     transformed_data = transform_data(data_content_filtering)
-    
     #save transformed data
     save_transformed_data(transformed_data,"data/transformed_data.npz")
     
