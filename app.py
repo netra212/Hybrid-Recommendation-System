@@ -1,16 +1,19 @@
 import streamlit as st
-from content_based_filtering import content_recommendation
+from content_based_filtering import recommend
 from scipy.sparse import load_npz
 import pandas as pd
 from numpy import load
 
 # load the data
 cleaned_data_path = "data/cleaned_data.csv"
-songs_data = pd.read_csv(cleaned_data_path)
+# songs_data = pd.read_csv(cleaned_data_path)
 
 # load the transformed data
 transformed_data_path = "data/transformed_data.npz"
 transformed_data = load_npz(transformed_data_path)
+
+# Loading the main data. 
+data = pd.read_csv(cleaned_data_path)
 
 # Title
 st.title("Welcome to the Spotify Song Recommender")
@@ -20,15 +23,15 @@ st.write("### Enter the name of a song and the recommder will suggest similar so
 
 # Text Input.
 song_name = st.text_input("Enter a song name: ")
-st.write("You entered: ", artist_name)
+song_name = song_name.lower()
+st.write("You entered: ", song_name)
 
 # artist name.
-artist_name = st.text_input("Enter the artist name: ")
-st.write("You entered: ", artist_name)
+# artist_name = st.text_input("Enter the artist name: ")
+# st.write("You entered: ", artist_name)
 
 # lowercase the input.
-song_name = song_name.lower()
-artist_name = artist_name.lower()
+# artist_name = artist_name.lower()
 
 # k recommendation.
 k = st.selectbox("How many recommendations do you want ?", [5, 10, 15, 20], index=1)
@@ -42,7 +45,7 @@ if st.button("Get Recommendations"):
         # Display Recommendation.
         for index, recommendation in recommendations.iterrows():
             song_name = recommendation["name"].title()
-            artist_name = recommendation["artist"].title()
+            # artist_name = recommendation["artist"].title()
 
             if index == 0:
                 st.markdown("## Currently Playing")
