@@ -3,7 +3,6 @@ import dask.dataframe as dd
 from scipy.sparse import csr_matrix, save_npz
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from content_based_filtering import recommend
 
 # set paths
 # output paths
