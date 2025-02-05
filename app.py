@@ -16,7 +16,7 @@ transformed_data = load_npz(transformed_data_path)
 
 # load the track ids
 track_ids_path = "data/track_ids.npy"
-track_ids = load(track_ids_path,allow_pickle=True)
+track_ids = load(track_ids_path, allow_pickle=True)
 
 # load the filtered songs data
 filtered_data_path = "data/collab_filtered_data.csv"
