@@ -1,0 +1,11 @@
+Collaborative Filtering: we don't shown content on the basis of user history. 
+In Collaborative filtering, we calculate the similarity between the user and items. 
+If between users --> User based CF.
+If between items --> Item based CF.
+
+Song A --> Converted into the vectors. similar for the other songs as well. 
+Then cosine similarity will be calculate. 
+
+Vectors is made on songs artist, attrbutes, and metadata.
+
+But in Collaborative, we calcualte the vector in user liking, rating, playcount. so we calculate the similarity between the above mentioned. 
