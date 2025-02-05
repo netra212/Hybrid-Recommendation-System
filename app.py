@@ -3,6 +3,7 @@ from content_based_filtering import recommend
 from scipy.sparse import load_npz
 import pandas as pd
 from numpy import load
+from sklearn.utils import Tags
 
 # load the data
 cleaned_data_path = "data/cleaned_data.csv"
@@ -49,20 +50,24 @@ if st.button("Get Recommendations"):
 
             if index == 0:
                 st.markdown("## Currently Playing")
-                st.markdown(f"## **{song_name}** by **{artist_name}")
+                st.markdown(f"## **{song_name}** by **")
+                # {artist_name}
                 st.audio(recommendation["spotify_preview_url"])
                 st.write("------")
 
             elif index == 1:
                 st.markdown("### Next up 🎵")
-                st.markdown(f"### {index}. **{song_name}** by **{artist_name}**")
+                st.markdown(f"### {index}. **{song_name}** by ****")
                 st.audio(recommendation["spotify_preview_url"])
                 st.write("------")
+
+                # {artist_name}
             
             else:
-                st.markdown(f"### {index}. **{song_name}** by **{artist_name}**")
+                st.markdown(f"### {index}. **{song_name}** by ****")
                 st.audio(recommendation["spotify_preview_url"])
                 st.write("------")
-        
+
+            # {artist_name}
         else:
             st.write(f"Sorry, we could not find {song_name} in our database.Please try another song.")
