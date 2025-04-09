@@ -2,3 +2,11 @@ Goal: Build Hybrid Recommender System.
 
 Reason: To Increase UserEngagement, UserRetention.
 
+Personalized, Diverse -> Hybrid Recommender System
+    - Personalized Recommendation - Gives by Content Based. 
+    - Diverse Recommendation - Gives by Collaborative Filtering.
+
+Phase I -> Only Content Based. 
+Phase II -> Only Collaborative
+Phase III -> Combine above both by Weighted Approach 
+    = Alpha1 * ContentBased + Alpha2 * CollaborativeBased 
