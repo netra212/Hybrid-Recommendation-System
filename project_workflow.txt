@@ -32,5 +32,22 @@ Song B
 Song C 
 Song D 
 
-similarity_vector [1, ., .,]
+similarity_vector [1, ., ., ., .,]
 then sort the vector, and fetch the top_5 or top_10. 
+
+In songs dataset -> 50K. 
+56% of value of genre columns are missing. so drop this columns. 
+
+steps. 
+1. Data Cleaning: 
+    - drop duplicates. 
+    - missing values - genres column drops. 
+    - tags - no tags. 
+    - name, artist, tags - convert to lower case. 
+
+# While building the ContentBased -->
+    - Looks for similar attributes
+
+so, transformations apply to dataset --> Vectorize --> Matrix. 
+similarities -> cosine similarity 
+then recommend top similarity scores. 
