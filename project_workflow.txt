@@ -21,3 +21,16 @@ Similar with
 Song B:
 Song C:
 Song D:
+
+Then caculates the similarity score, 
+k(x, y) = x.y^T / ||x|| ||y||
+
+Now, calcualtes the similarity of Song A with each other. 
+        Song A   Song B   Song C    Song D
+Song A 
+Song B
+Song C 
+Song D 
+
+similarity_vector [1, ., .,]
+then sort the vector, and fetch the top_5 or top_10. 
