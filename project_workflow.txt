@@ -51,3 +51,20 @@ steps.
 so, transformations apply to dataset --> Vectorize --> Matrix. 
 similarities -> cosine similarity 
 then recommend top similarity scores. 
+
+# Collaborative Filtering. 
+    - Find out the similarity between the users and items. 
+    - calculate the similarity between the users. 
+    - Similarity calculates on the basis of PlayCount. 
+
+        Song A      Song B      Song C      Song D
+User A   
+User B 
+User C 
+User D
+User E
+
+to calculaten the similarity score. we have to make user interaction matrix. 
+Items - User Interaction matrix. 
+    Rows -- Unique songs. 
+    Cols -- Unique users.
