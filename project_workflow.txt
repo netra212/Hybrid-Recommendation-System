@@ -10,3 +10,14 @@ Phase I -> Only Content Based.
 Phase II -> Only Collaborative
 Phase III -> Combine above both by Weighted Approach 
     = Alpha1 * ContentBased + Alpha2 * CollaborativeBased 
+
+Work:
+By calculating similarity between the songs (metadata about the songs: tags, artist, attributes[temp, valence, dancebility, key]).
+
+Song A:
+    - 1st Vectorized. 
+    - [0.9, 0.3] <- 2D Vectors
+Similar with 
+Song B:
+Song C:
+Song D:
