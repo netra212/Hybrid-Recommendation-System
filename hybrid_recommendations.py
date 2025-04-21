@@ -3,8 +3,7 @@ import pandas as pd
 from scipy.sparse import load_npz
 from sklearn.metrics.pairwise import cosine_similarity
 
-
-
+# Building an class for the Hybrid Recommender System. 
 class HybridRecommenderSystem:
     
     def __init__(self,  
