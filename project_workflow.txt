@@ -103,3 +103,46 @@ Song_E
 # Hybrid Recommender System. 
 - ContentBased + CollaborativeBased.
 - weights apply on the similarity_scores.
+
+
+-- Improvement in the System. 
+1. Dynamic -> Weights values. 
+    - Does the user like more dynamic or more Personalized recommendation.
+    - if user like dynamic then w2 weights will be increase for the Collaborative filtering. 
+    - But if user like more personalized w1 weights will be increase for the content based filtering. 
+
+2. 30K - W1 * Content Based + W2 * Collaborative Based
+
+- Cold start problems 
+Example:- 
+- New songs -> since there are no users for this new songs. so for this new songs, we apply content based filterings.
+
+3. streamlit - Loading of the dataset. 
+    - Python script.
+
+--------------------------------------------------------
+# Metrics to Evaluate. 
+- Precision - Accuracy of Recommendation.
+    - 3 recommendation -> relevant.
+Precision@3 = No. of relevant recommendation / No. of top_k recommendation
+    - tells the quality of the predictions.
+Precision = TP/TP+FP
+
+- Recall
+    - 10 Relevant Recommmender. 
+    Recall = No. of Recommendation in top_k / No. of all relevant Recommendation
+    Recall@10 = 7/10
+    Recall = TP / (TP + TN)
+
+# Model Based Recommender Systems. 
+- SVD Factorization.
+- Build Latent Features -> Hidden features about our tracks. 
+- A = U np.sum V^T 
+where, U -> tells the trackID latent features. 
+       V -> userID latent features. 
+       np.sum -> Diagonal matrix tells the relevant matrix. 
+
+- Regression Metrics like: MAE, MSE, RMSE are used in this model based recommender systems. 
+- Boosting algorithms like xgboost, lightGBM can be used for this case. 
+
+- To implement SVD Factorization, surprise & recsys python package can be used. 
