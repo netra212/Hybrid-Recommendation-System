@@ -178,3 +178,5 @@ cython_debug/
 
 /transformer.joblib
 .DS_Store
+
+/.dvc
