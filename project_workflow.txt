@@ -80,4 +80,26 @@ Song_E
 
 # steps. 
 - Build the interaction matrix with Dask. 
-- then converts that matrix into sparse matrix. 
+- then converts that matrix into sparse matrix.
+
+
+-- summary. 
+- songs dataset -> 50K
+    - transforms -> 50k, 800
+    - used for content based filtering. 
+
+- userHistory dataset -> 97 Lakhs. 
+    - build new subset dataset named filtered songs(30K) dataset from songs_dataset
+    - now, building the interaction matrix from it. 
+    - shape: (30K, 97Lakhs) -> sparse matrix -> 30MB. 
+
+- Raw -> Music_info.csv -> 50K
+      -> userListeningHistory.csv -> 97 Lakhs
+
+- Music_info -> Transformed Matrix -> Content Based. 
+- userListeningHistory -> Build filtered datasets 30k from Music_info... and Interaction matrix with nRows -> 30k, 97Lakhs rows -> 30MB & 3rd trackIdsArray -> numpyArray.
+
+------------------------------------------------
+# Hybrid Recommender System. 
+- ContentBased + CollaborativeBased.
+- weights apply on the similarity_scores.
