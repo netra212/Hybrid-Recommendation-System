@@ -68,3 +68,16 @@ to calculaten the similarity score. we have to make user interaction matrix.
 Items - User Interaction matrix. 
     Rows -- Unique songs. 
     Cols -- Unique users.
+
+Below represent the 'Items User Interaction Matrix'.
+
+        User_A   User_B     User_C    User_D    User_E
+Song_A
+Song_B
+Song_C
+Song_D
+Song_E
+
+# steps. 
+- Build the interaction matrix with Dask. 
+- then converts that matrix into sparse matrix. 
