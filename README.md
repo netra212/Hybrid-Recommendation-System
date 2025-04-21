@@ -20,7 +20,7 @@ A modular and scalable Hybrid Recommendation System that combines Content-Based 
 
 * ✅ CI/CD workflow for automated testing and deployment
 
---
+
 ### 🗂️ Project Structure
 ```
 Hybrid-Recommendation-System/
@@ -44,7 +44,7 @@ Hybrid-Recommendation-System/
 └── ...
 
 ```
---
+
 ### 📦 Setup Instructions
 
 #### 1️⃣ Clone the repository
@@ -67,26 +67,26 @@ conda create --name recsys-env python=3.12
 conda activate recsys-env
 pip install -r requirements.txt
 ```
---
+
 ### ⚙️ Running the Pipeline
 * Make sure DVC is installed:
 ```pip install dvc```
 
 * Run the full pipeline:
 ```dvc repro```
---
+
 ### 🧪 Notebooks
 * **Hybrid_Recomment_System_Content_Based_Recommendation.ipynb** – Analysis and model building for content-based recommendations.
 
 * **Spotify_Collaborative_Filtering.ipynb** – Exploratory analysis and collaborative filtering.
---
+
 ### 🐳 Docker Support
 Build and run the app in a container:
 ```
 docker build -t hybrid-recsys .
 docker run -p 8501:8501 hybrid-recsys
 ```
---
+
 ### 🧠 How the Hybrid Model Works
 The hybrid system combines:
 
@@ -95,7 +95,7 @@ The hybrid system combines:
 * **Latent Factors** from **collaborative filtering** (e.g., matrix factorization)
 
 Both scores are **normalized and weighted** to produce the final recommendations.
---
+
 ### ✅ Use Cases
 * Music streaming platforms
 
@@ -104,7 +104,7 @@ Both scores are **normalized and weighted** to produce the final recommendations
 * E-commerce recommendation systems
 
 * Social media content suggestions
---
+
 ### 📌 TODOs / Improvements
 * Add Streamlit-based front-end for real-time user interaction
 
@@ -114,12 +114,12 @@ Both scores are **normalized and weighted** to produce the final recommendations
 
 * Add unit testing for all modules
 
---
+
 ### 🤝 Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss.
---
+
 ### 📄 License
     MIT
---
+
 ### 📬 Contact
 Created by Netra KC – Feel free to reach out with questions or suggestions!
