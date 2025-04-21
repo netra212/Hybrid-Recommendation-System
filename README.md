@@ -24,7 +24,7 @@ A modular and scalable Hybrid Recommendation System that combines Content-Based 
 ```
 Hybrid-Recommendation-System/
 │
-├── .dvc/                        # DVC metadata
+├── .dvc/                      # DVC metadata
 ├── .github/workflows/          # CI/CD pipeline
 ├── notebooks/                  # EDA & model notebooks
 ├── recsys-env/                 # Python virtual environment (optional)
