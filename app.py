@@ -60,7 +60,7 @@ if ((filtered_data["name"] == song_name) & (filtered_data["artist"] == artist_na
                         value=5,
                         step=1)
 
-    content_based_weight = 1 - (diversity / 10)
+    content_based_weight = 1 - (diversity / 10) # since i need in the float so i divided by the 10.
     
     # plot a bar graph
     chart_data = pd.DataFrame({
