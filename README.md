@@ -44,7 +44,6 @@ Hybrid-Recommendation-System/
 └── ...
 
 ```
-
 --
 ### 📦 Setup Instructions
 
@@ -114,12 +113,13 @@ Both scores are **normalized and weighted** to produce the final recommendations
 * Deploy to cloud (AWS/GCP/Azure) with Docker or FastAPI
 
 * Add unit testing for all modules
+
 --
 ### 🤝 Contributing
 Pull requests are welcome! For major changes, please open an issue first to discuss.
 --
 ### 📄 License
-MIT
+    MIT
 --
 ### 📬 Contact
 Created by Netra KC – Feel free to reach out with questions or suggestions!
