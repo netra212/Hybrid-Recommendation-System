@@ -14,10 +14,10 @@ class HybridRecommenderSystem:
         self.weight_content_based = weight_content_based
         self.weight_collaborative = 1 - weight_content_based
         
-        
+    # calculating the similarities between the content based filtering.
     def __calculate_content_based_similarities(self,song_name, artist_name, songs_data,transformed_matrix):
         # filter out the song from data
-        song_row = songs_data.loc[(songs_data["name"] == song_name) & (songs_data["artist"] == artist_name)]
+        song_row = songs_data.loc[(songs_data["name"] == song_name) & (songs_data["artist"] == artist_name)
         # get the index of song
         song_index = song_row.index[0]
         # generate the input vector
@@ -26,7 +26,6 @@ class HybridRecommenderSystem:
         content_similarity_scores = cosine_similarity(input_vector, transformed_matrix)
         return content_similarity_scores
         
-    
     def __calculate_collaborative_filtering_similarities(self, song_name, artist_name, track_ids, songs_data, interaction_matrix):
         # fetch the row from songs data
         song_row = songs_data.loc[(songs_data["name"] == song_name) & (songs_data["artist"] == artist_name)]
